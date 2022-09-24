@@ -15,7 +15,10 @@ preparedRouter.use(
       if (!res.statusCode || res.statusCode < 400 || res.statusCode > 599)
         success(req.url, `${req.method} REQUEST`);
       else
-        error(`${req.url}: ${JSON.parse(body).message}`, `${req.method} REQUEST`);
+        error(
+          `${req.url}: ${JSON.parse(body).message}`,
+          `${req.method} REQUEST`
+        );
 
       send(body);
     },
@@ -42,7 +45,8 @@ const loadRoutes = async (route, baseRoute = "", availableMiddleware = {}) => {
       return (availableMiddleware[middlewareName] = middleware);
     }
 
-    const endpointRoute = route.replace(baseRoute, "");
+    const endpointRoute =
+      route.replace(baseRoute, "") === "" ? "/" : route.replace(baseRoute, "");
 
     if (ALLOWED_FILE_NAMES.includes(fileName.split(".")[0])) {
       const [method] = fileName.split(".");
