@@ -17,7 +17,8 @@ preparedRouter.use(
       else
         error(
           `${req.url}: ${JSON.parse(body).message}`,
-          `${req.method} REQUEST`
+          `${req.method} REQUEST`,
+          res.statusCode
         );
 
       send(body);
@@ -56,7 +57,7 @@ const loadRoutes = async (route, baseRoute = "", availableMiddleware = {}) => {
 
         preparedRouter[method](endpointRoute, routeHandler);
 
-        return info(`${endpointRoute} added`, method);
+        return info(`${endpointRoute} loaded`, method);
       } catch (err) {
         if (err.message.includes("Cannot find module"))
           return warn(
@@ -89,7 +90,7 @@ const loadRoutes = async (route, baseRoute = "", availableMiddleware = {}) => {
           routeHandler
         );
 
-        return info(`${endpointRoute} added`, method);
+        return info(`${endpointRoute} loaded`, method);
       } catch (err) {
         console.log(err);
         if (err.message === "middleware does not exist")

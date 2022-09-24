@@ -13,5 +13,5 @@ const loggerHandler = (color, msg, type, method) =>
 
 export const info = (msg, type) => loggerHandler("blue", msg, type, "INFO");
 export const warn = (msg, type) => loggerHandler("yellow", msg, type, "WARN");
-export const error = (msg, type) => loggerHandler("red", msg, type, "ERROR");
+export const error = (msg, type, statusCode = null) => loggerHandler("red", msg, type, `ERROR${statusCode ? `:${statusCode}` : ""}`);
 export const success = (msg, type) => loggerHandler("green", msg, type, "OK");
