@@ -1,6 +1,17 @@
 import chalk from "chalk";
 
-export const info = (msg, type) => console.log(chalk.blue(`${new Date().toISOString().replace("Z", "")}: [INFO] [${type.toUpperCase()}] ${msg}`))
-export const warn = (msg, type) => console.log(chalk.yellow(`${new Date().toISOString().replace("Z", "")}: [WARN] [${type.toUpperCase()}] ${msg}`))
-export const error = (msg, type) => console.log(chalk.red(`${new Date().toISOString().replace("Z", "")}: [ERROR] [${type.toUpperCase()}] ${msg}`))
-export const success = (msg, type) => console.log(chalk.green(`${new Date().toISOString().replace("Z", "")}: [OK] [${type.toUpperCase()}] ${msg}`))
+const loggerHandler = (color, msg, type, method) =>
+  console.log(
+    chalk[color](
+      `${chalk[color + "Bright"](
+        new Date().toISOString().replace("Z", "")
+      )}: [${method}] [${chalk[color + "Bright"](type.toUpperCase())}] ${chalk[
+        color + "Bright"
+      ](msg)}`
+    )
+  );
+
+export const info = (msg, type) => loggerHandler("blue", msg, type, "INFO");
+export const warn = (msg, type) => loggerHandler("yellow", msg, type, "WARN");
+export const error = (msg, type) => loggerHandler("red", msg, type, "ERROR");
+export const success = (msg, type) => loggerHandler("green", msg, type, "OK");

@@ -12,10 +12,10 @@ preparedRouter.use(
   interceptor((req, res) => ({
     isInterceptable: () => /application\/json/.test(res.get("Content-Type")),
     intercept: (body, send) => {
-      if (!res.statusCode || res.statusCode === 200)
-        success(req.url, `INCOMING ${req.method}`);
+      if (!res.statusCode || res.statusCode < 400 && res.statusCode > 599)
+        success(req.url, `${req.method} REQUEST`);
       else
-        error(`${req.url}: ${JSON.parse(body).message}`, `INCOMING ${req.method}`);
+        error(`${req.url}: ${JSON.parse(body).message}`, `${req.method} REQUEST`);
 
       send(body);
     },

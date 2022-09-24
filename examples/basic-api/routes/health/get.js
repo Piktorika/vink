@@ -1,3 +1,7 @@
 export default (req, res, next) => {
-    res.json();
-}
+  res.json({
+    data: {
+      ok: true,
+    },
+  });
+};
