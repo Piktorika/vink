@@ -4,6 +4,8 @@ A library that allows users to generate API from a file system.
 
 ## Demo
 
+<img src="https://github.com/Piktorika/vink/blob/main/static/demo1.png?raw=true" style="zoom: 50%;" />
+
 
 ## Installation
 
