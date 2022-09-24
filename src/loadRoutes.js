@@ -10,7 +10,7 @@ const preparedRouter = Router();
 
 preparedRouter.use(
   interceptor((req, res) => ({
-    isInterceptable: () => /application\/json/.test(res.get("Content-Type")),
+    isInterceptable: () => true,
     intercept: (body, send) => {
       if (!res.statusCode || res.statusCode < 400 || res.statusCode > 599)
         success(req.url, `${req.method} REQUEST`);
