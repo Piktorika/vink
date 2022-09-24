@@ -2,7 +2,7 @@ import { readdir, lstat } from "fs/promises";
 import { Router } from "express";
 
 import { ALLOWED_FILE_NAMES } from "./constants.js";
-import { warn, info, success, error } from "./logger.js";
+import { warn, info, success, error } from "./utils/logger.js";
 
 import interceptor from "express-interceptor";
 
