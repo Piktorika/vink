@@ -92,7 +92,6 @@ const loadRoutes = async (route, baseRoute = "", availableMiddleware = {}) => {
 
         return info(`${endpointRoute} loaded`, method);
       } catch (err) {
-        console.log(err);
         if (err.message === "middleware does not exist")
           return warn(
             `The selected middleware applied on ${endpointRoute} does not exist. Ommitting creation...`,
