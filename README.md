@@ -1,6 +1,6 @@
 # Vink
 
-A library that allows users to generate API from a file system.
+A library that allows users to generate API routes from an specified file system.
 
 ## Demo
 
