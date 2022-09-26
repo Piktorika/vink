@@ -2,9 +2,10 @@
 
 A library that allows users to generate API routes from an specified file system.
 
-## Demo
+## Demos
 
-<img src="https://github.com/Piktorika/vink/blob/main/static/demo1.png?raw=true" style="zoom: 50%;" />
+- [API with Middleware](https://github.com/Piktorika/vink/tree/main/examples/api-with-middleware)
+- [Basic API](https://github.com/Piktorika/vink/tree/main/examples/basic-api)
 
 
 ## Installation
