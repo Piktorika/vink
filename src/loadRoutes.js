@@ -2,49 +2,35 @@ import { readdir, lstat } from "fs/promises";
 import { Router } from "express";
 
 import { ALLOWED_FILE_NAMES } from "./constants.js";
-import { warn, info, success, error } from "./utils/logger.js";
+import { warn, info } from "./utils/logger.js";
 
-import interceptor from "express-interceptor";
+import requestLogger from "./core/requestLogger.js";
 
 const preparedRouter = Router();
 
-preparedRouter.use(
-  interceptor((req, res) => ({
-    isInterceptable: () => true,
-    intercept: (body, send) => {
-      if (!res.statusCode || res.statusCode < 400 || res.statusCode > 599)
-        success(req.url, `${req.method} REQUEST`);
-      else if (res.statusCode === 404)
-        error(`${req.url}: Not found`, `${req.method} REQUEST`, res.statusCode);
-      else
-        error(
-          `${req.url}: ${
-            res.get("Content-Type") === "application/json"
-              ? JSON.parse(body).message
-              : ""
-          }`,
-          `${req.method} REQUEST`,
-          res.statusCode
-        );
-
-      send(body);
-    },
-  }))
-);
-
-const loadRoutes = async (route, baseRoute = "", availableMiddleware = {}) => {
+const loadRoutes = async (route, options = { logger: true }) => {
   const files = await readdir(route);
 
-  if (!baseRoute) baseRoute = route;
+  if (options?.logger && !options?.baseRoute) {
+    preparedRouter.use(requestLogger);
+  }
+
+  let baseRoute = options?.baseRoute ?? route;
+  let availableMiddleware = options?.availableMiddleware ?? {};
 
   files.forEach(async (fileName) => {
     const fileRoute = `${route}/${fileName}`;
     const fileInfo = await lstat(fileRoute);
 
     if (fileInfo.isDirectory()) {
-      return await loadRoutes(fileRoute, baseRoute, availableMiddleware);
+      return await loadRoutes(fileRoute, {
+        ...options,
+        baseRoute,
+        availableMiddleware,
+      });
     }
 
+    // Middleware definition files
     if (/^.+\.middleware\.js$/.test(fileName)) {
       const { default: middleware } = await import(fileRoute);
       const [middlewareName] = fileName.split(".");
@@ -55,6 +41,7 @@ const loadRoutes = async (route, baseRoute = "", availableMiddleware = {}) => {
     const endpointRoute =
       route.replace(baseRoute, "") === "" ? "/" : route.replace(baseRoute, "");
 
+    // Basic HTTP routes
     if (ALLOWED_FILE_NAMES.includes(fileName.split(".")[0])) {
       const [method] = fileName.split(".");
 
@@ -80,6 +67,7 @@ const loadRoutes = async (route, baseRoute = "", availableMiddleware = {}) => {
       }
     }
 
+    // Routes with middleware
     if (/^.+\@.+\.js$/.test(fileName)) {
       const [method] = fileName.split("@");
       const [middleware] = fileName.split("@")[1].split(".");
