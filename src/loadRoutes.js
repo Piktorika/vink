@@ -6,20 +6,31 @@ import { warn, info } from "./utils/logger.js";
 
 import requestLogger from "./core/requestLogger.js";
 
+import path from "node:path";
+import { dirname, resolve } from "path";
+
+import parentModule from "parent-module";
+
 const preparedRouter = Router();
 
 const loadRoutes = async (route, options = { logger: true }) => {
-  const files = await readdir(route);
+  const parentPath = path.dirname(parentModule()).replace("file://", "");
+  const absoluteRoutePath = resolve(`${parentPath}/${route}`);
+  const files = !options?.baseRoute
+    ? await readdir(absoluteRoutePath)
+    : await readdir(route);
 
   if (options?.logger && !options?.baseRoute) {
     preparedRouter.use(requestLogger);
   }
 
-  let baseRoute = options?.baseRoute ?? route;
+  let baseRoute = options?.baseRoute ?? absoluteRoutePath;
   let availableMiddleware = options?.availableMiddleware ?? {};
 
   files.forEach(async (fileName) => {
-    const fileRoute = `${route}/${fileName}`;
+    const fileRoute = !options?.baseRoute
+      ? `${absoluteRoutePath}/${fileName}`
+      : `${route}/${fileName}`;
     const fileInfo = await lstat(fileRoute);
 
     if (fileInfo.isDirectory()) {
@@ -60,8 +71,14 @@ const loadRoutes = async (route, options = { logger: true }) => {
             method
           );
 
-        return warn(
-          `Endpoint ${endpointRoute} is missing a default export definition. Omitting route...`,
+        if (err.message.includes("requires a callback function"))
+          return warn(
+            `Endpoint ${endpointRoute} is missing a default export definition. Omitting route...`,
+            method
+          );
+
+        warn(
+          `Endpoing ${endpointRoute} has some errors: ` + err.message,
           method
         );
       }
@@ -99,6 +116,8 @@ const loadRoutes = async (route, options = { logger: true }) => {
               " contains import errors. Ommitting...",
             method
           );
+
+        console.log(err);
 
         warn(
           `Endpoint ${endpointRoute} is missing a default export definition`,

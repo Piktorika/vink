@@ -1,14 +1,16 @@
-lockfileVersion: 5.4
+lockfileVersion: 5.3
 
 specifiers:
   chalk: 5.0.1
   express: 4.18.1
   express-interceptor: 1.2.0
+  parent-module: ^3.0.0
 
 dependencies:
   chalk: 5.0.1
   express: 4.18.1
   express-interceptor: 1.2.0
+  parent-module: 3.0.0
 
 packages:
 
@@ -40,8 +42,6 @@ packages:
       raw-body: 2.5.1
       type-is: 1.6.18
       unpipe: 1.0.0
-    transitivePeerDependencies:
-      - supports-color
     dev: false
 
   /bytes/3.1.2:
@@ -54,6 +54,11 @@ packages:
     dependencies:
       function-bind: 1.1.1
       get-intrinsic: 1.1.3
+    dev: false
+
+  /callsites/4.0.0:
+    resolution: {integrity: sha512-y3jRROutgpKdz5vzEhWM34TidDU8vkJppF8dszITeb1PQmSqV3DTxyV8G/lyO/DNvtE1YTedehmw9MPZsCBHxQ==}
+    engines: {node: '>=12.20'}
     dev: false
 
   /chalk/5.0.1:
@@ -84,11 +89,6 @@ packages:
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
     dependencies:
       ms: 2.0.0
     dev: false
@@ -125,8 +125,6 @@ packages:
     resolution: {integrity: sha512-fCbcJv8ZwabDg0M/3PmHUxfr/WKHGMpAicR9TfGdhANV4M1GBDSrBTenHIK3aegyRN5S6eDwlvyNFiLynnc19w==}
     dependencies:
       debug: 2.6.9
-    transitivePeerDependencies:
-      - supports-color
     dev: false
 
   /express/4.18.1:
@@ -164,8 +162,6 @@ packages:
       type-is: 1.6.18
       utils-merge: 1.0.1
       vary: 1.1.2
-    transitivePeerDependencies:
-      - supports-color
     dev: false
 
   /finalhandler/1.2.0:
@@ -179,8 +175,6 @@ packages:
       parseurl: 1.3.3
       statuses: 2.0.1
       unpipe: 1.0.0
-    transitivePeerDependencies:
-      - supports-color
     dev: false
 
   /forwarded/0.2.0:
@@ -300,6 +294,13 @@ packages:
       ee-first: 1.1.1
     dev: false
 
+  /parent-module/3.0.0:
+    resolution: {integrity: sha512-zJXn5iKdXXUV51iC7O4nHiPs/eWnkd0obrHDlOKQ6/MafFrxljinW6hCkr0UTsAGq7B+NXT2wIfLshcD+5RvIw==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      callsites: 4.0.0
+    dev: false
+
   /parseurl/1.3.3:
     resolution: {integrity: sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==}
     engines: {node: '>= 0.8'}
@@ -364,8 +365,6 @@ packages:
       on-finished: 2.4.1
       range-parser: 1.2.1
       statuses: 2.0.1
-    transitivePeerDependencies:
-      - supports-color
     dev: false
 
   /serve-static/1.15.0:
@@ -376,8 +375,6 @@ packages:
       escape-html: 1.0.3
       parseurl: 1.3.3
       send: 0.18.0
-    transitivePeerDependencies:
-      - supports-color
     dev: false
 
   /setprototypeof/1.2.0:
