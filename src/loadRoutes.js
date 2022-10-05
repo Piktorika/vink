@@ -117,8 +117,6 @@ const loadRoutes = async (route, options = { logger: true }) => {
             method
           );
 
-        console.log(err);
-
         warn(
           `Endpoint ${endpointRoute} is missing a default export definition`,
           method
