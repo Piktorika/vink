@@ -63,6 +63,8 @@ const loadRoutes = async (route, options = { logger: true }) => {
 
         return info(`${endpointRoute} loaded`, method);
       } catch (err) {
+        if(!options.logger) throw err;
+
         if (err.message.includes("Cannot find module"))
           return warn(
             "Endpoint " +
@@ -103,6 +105,8 @@ const loadRoutes = async (route, options = { logger: true }) => {
 
         return info(`${endpointRoute} loaded`, method);
       } catch (err) {
+        if(!options.logger) throw err;
+
         if (err.message === "middleware does not exist")
           return warn(
             `The selected middleware applied on ${endpointRoute} does not exist. Ommitting creation...`,
