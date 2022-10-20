@@ -6,6 +6,8 @@ import { warn, info } from "./utils/logger.js";
 
 import requestLogger from "./core/requestLogger.js";
 
+import errorHandler from "./core/errorHandler.js";
+
 import path from "node:path";
 import { dirname, resolve } from "path";
 
@@ -63,26 +65,7 @@ const loadRoutes = async (route, options = { logger: true }) => {
 
         return info(`${endpointRoute} loaded`, method);
       } catch (err) {
-        if(!options.logger) throw err;
-
-        if (err.message.includes("Cannot find module"))
-          return warn(
-            "Endpoint " +
-              endpointRoute +
-              " contains import errors. Ommitting...",
-            method
-          );
-
-        if (err.message.includes("requires a callback function"))
-          return warn(
-            `Endpoint ${endpointRoute} is missing a default export definition. Omitting route...`,
-            method
-          );
-
-        warn(
-          `Endpoing ${endpointRoute} has some errors: ` + err.message,
-          method
-        );
+        return warn(errorHandler(err, method, endpointRoute, options), method);
       }
     }
 
@@ -105,26 +88,7 @@ const loadRoutes = async (route, options = { logger: true }) => {
 
         return info(`${endpointRoute} loaded`, method);
       } catch (err) {
-        if(!options.logger) throw err;
-
-        if (err.message === "middleware does not exist")
-          return warn(
-            `The selected middleware applied on ${endpointRoute} does not exist. Ommitting creation...`,
-            method
-          );
-
-        if (err.message.includes("Cannot find module"))
-          return warn(
-            "Endpoint " +
-              endpointRoute +
-              " contains import errors. Ommitting...",
-            method
-          );
-
-        warn(
-          `Endpoint ${endpointRoute} is missing a default export definition`,
-          method
-        );
+        return warn(errorHandler(err, method, endpointRoute, options), method);
       }
     }
   });
