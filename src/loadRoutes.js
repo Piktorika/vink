@@ -9,11 +9,13 @@ import requestLogger from "./core/requestLogger.js";
 import errorHandler from "./core/errorHandler.js";
 
 import path from "node:path";
-import { dirname, resolve } from "path";
+import { resolve } from "path";
 
 import parentModule from "parent-module";
 
 const preparedRouter = Router();
+
+const removeGroups = (route) => route.replace(/\/\(.+\)/g, "");
 
 const loadRoutes = async (route, options = { logger: true }) => {
   const parentPath = path.dirname(parentModule()).replace("file://", "");
@@ -54,6 +56,8 @@ const loadRoutes = async (route, options = { logger: true }) => {
     const endpointRoute =
       route.replace(baseRoute, "") === "" ? "/" : route.replace(baseRoute, "");
 
+    const validRoute = removeGroups(endpointRoute)
+
     // Basic HTTP routes
     if (ALLOWED_FILE_NAMES.includes(fileName.split(".")[0])) {
       const [method] = fileName.split(".");
@@ -61,11 +65,11 @@ const loadRoutes = async (route, options = { logger: true }) => {
       try {
         const { default: routeHandler } = await import(fileRoute);
 
-        preparedRouter[method](endpointRoute, routeHandler);
+        preparedRouter[method](validRoute, routeHandler);
 
-        return info(`${endpointRoute} loaded`, method);
+        return info(`${validRoute} loaded`, method);
       } catch (err) {
-        return warn(errorHandler(err, method, endpointRoute, options), method);
+        return warn(errorHandler(err, method, validRoute, options), method);
       }
     }
 
@@ -81,14 +85,14 @@ const loadRoutes = async (route, options = { logger: true }) => {
         if (!selectedMiddleware) throw Error("middleware does not exist");
 
         preparedRouter[method](
-          route.replace(baseRoute, ""),
+          removeGroups(route).replace(baseRoute, ""),
           selectedMiddleware,
           routeHandler
         );
 
-        return info(`${endpointRoute} loaded`, method);
+        return info(`${validRoute} loaded`, method);
       } catch (err) {
-        return warn(errorHandler(err, method, endpointRoute, options), method);
+        return warn(errorHandler(err, method, validRoute, options), method);
       }
     }
   });
