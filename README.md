@@ -6,6 +6,7 @@ A library that allows users to generate API routes from an specified file system
 
 - [API with Middleware](https://github.com/Piktorika/vink/tree/main/examples/api-with-middleware)
 - [Basic API](https://github.com/Piktorika/vink/tree/main/examples/basic-api)
+- [CRUD API](https://github.com/Piktorika/vink/tree/main/examples/crud-api)
 
 
 ## Installation
