@@ -59,7 +59,6 @@ const loadRoutes = async (route, options = { logger: true }) => {
 
     // Basic HTTP routes
     if (/^(post|get|put|patch|delete)\.js$/.test(fileName)) {
-      console.log("uywu", fileName)
       const [method] = fileName.split(".");
 
       try {
