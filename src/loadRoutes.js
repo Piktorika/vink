@@ -1,7 +1,6 @@
 import { readdir, lstat } from "fs/promises";
 import { Router } from "express";
 
-import { ALLOWED_FILE_NAMES } from "./constants.js";
 import { warn, info } from "./utils/logger.js";
 
 import requestLogger from "./core/requestLogger.js";
@@ -59,7 +58,7 @@ const loadRoutes = async (route, options = { logger: true }) => {
     const validRoute = removeGroups(endpointRoute)
 
     // Basic HTTP routes
-    if (ALLOWED_FILE_NAMES.includes(fileName.split(".")[0])) {
+    if (/^(post|get|put|patch|delete)\.js$/.test(fileName)) {
       const [method] = fileName.split(".");
 
       try {

@@ -1,5 +1,3 @@
-export const ALLOWED_FILE_NAMES = ["put", "post", "get", "delete", "patch"];
-
 export const DEFAULT_ERROR_MESSAGE = "Endpoint %s has some errors: %s. Ommitting route...";
 export const ERROR_MESSAGES = [
     {
