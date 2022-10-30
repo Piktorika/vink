@@ -59,6 +59,7 @@ const loadRoutes = async (route, options = { logger: true }) => {
 
     // Basic HTTP routes
     if (/^(post|get|put|patch|delete)\.js$/.test(fileName)) {
+      console.log("uywu", fileName)
       const [method] = fileName.split(".");
 
       try {
@@ -73,7 +74,7 @@ const loadRoutes = async (route, options = { logger: true }) => {
     }
 
     // Routes with middleware
-    if (/^.+\@.+\.js$/.test(fileName)) {
+    if (/^(get|post|delete|put|patch)\@.+\.js$/.test(fileName)) {
       const [method] = fileName.split("@");
       const [middleware] = fileName.split("@")[1].split(".");
 
