@@ -1,4 +1,4 @@
-import { success, error } from "../utils/logger.js";
+import { success, error } from "./logger.js";
 
 import interceptor from "express-interceptor";
 

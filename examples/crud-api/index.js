@@ -30,7 +30,7 @@ const main = async () => {
   app.use(express.json());
   app.use("/", loadedRoutes);
 
-  app.listen(port, () => logger.info(`Listening on port ${port}`, "API"));
+  app.listen(port, () => logger.info("API", `Listening on port ${port}`));
 };
 
 main();

@@ -1,11 +1,9 @@
 import { readdir, lstat } from "fs/promises";
 import { Router } from "express";
 
-import { warn, info } from "./utils/logger.js";
-
-import requestLogger from "./core/requestLogger.js";
-
-import errorHandler from "./core/errorHandler.js";
+import { warn, info } from "./logger.js";
+import requestLogger from "./requestLogger.js";
+import errorHandler from "./errorHandler.js";
 
 import path from "node:path";
 import { resolve } from "path";
@@ -55,7 +53,7 @@ const loadRoutes = async (route, options = { logger: true }) => {
     const endpointRoute =
       route.replace(baseRoute, "") === "" ? "/" : route.replace(baseRoute, "");
 
-    const validRoute = removeGroups(endpointRoute)
+    const validRoute = removeGroups(endpointRoute);
 
     // Basic HTTP routes
     if (/^(post|get|put|patch|delete)\.js$/.test(fileName)) {
@@ -66,9 +64,9 @@ const loadRoutes = async (route, options = { logger: true }) => {
 
         preparedRouter[method](validRoute, routeHandler);
 
-        return info(`${validRoute} loaded`, method);
+        return info(method, `${validRoute} loaded`);
       } catch (err) {
-        return warn(errorHandler(err, method, validRoute, options), method);
+        return warn(method, errorHandler(err, method, validRoute, options));
       }
     }
 
@@ -89,9 +87,9 @@ const loadRoutes = async (route, options = { logger: true }) => {
           routeHandler
         );
 
-        return info(`${validRoute} loaded`, method);
+        return info(method, `${validRoute} loaded`);
       } catch (err) {
-        return warn(errorHandler(err, method, validRoute, options), method);
+        return warn(method, errorHandler(err, method, validRoute, options));
       }
     }
   });
