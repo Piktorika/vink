@@ -34,7 +34,7 @@ const applicationPort = 3001;
 
 // your initial express setup
 
-const loadedRoutes = loadRoutes("your-absolute-route-path");
+const loadedRoutes = await loadRoutes("./relative-path-to-routes-folder");
 
 app.use("/", loadedRoutes);
 
