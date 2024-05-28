@@ -1,6 +1,6 @@
 {
   "name": "@piktorika/vink",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Route generator for Express",
   "main": "src/index.js",
   "scripts": {
