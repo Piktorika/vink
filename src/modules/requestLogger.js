@@ -6,19 +6,14 @@ export default interceptor((req, res) => ({
   isInterceptable: () => true,
   intercept: (body, send) => {
     if (!res.statusCode || res.statusCode < 400 || res.statusCode > 599)
-      success(req.url, `${req.method} REQUEST`);
+      success(`${req.method}`, req.url.toLowerCase());
     else if (res.statusCode === 404)
-      error(`${req.url}: Not found`, `${req.method} REQUEST`, res.statusCode);
-    else
-      error(
-        `${req.url}: ${
-          res.get("Content-Type").includes("application/json")
-            ? JSON.parse(body).message
-            : ""
-        }`,
-        `${req.method} REQUEST`,
-        res.statusCode
-      );
+      error(res.statusCode, `${req.url}: Not found`);
+    else error(res.statusCode, `${req.url}: ${
+      res.get("Content-Type").includes("application/json")
+        ? JSON.parse(body).message
+        : ""
+    }`);
 
     send(body);
   },
