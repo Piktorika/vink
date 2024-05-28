@@ -17,7 +17,7 @@ const removeGroups = (route) => route.replace(/\/\(.+\)/g, "");
 const loadRoutes = async (route, options = { logger: true }) => {
   const parentPath = path.dirname(parentModule()).replace("file://", "");
   const absoluteRoutePath = resolve(`${parentPath}/${route}`);
-  
+
   const files = !options?.baseRoute
     ? await readdir(absoluteRoutePath)
     : await readdir(route);
@@ -58,23 +58,27 @@ const loadRoutes = async (route, options = { logger: true }) => {
 
       const validRoute = removeGroups(endpointRoute);
 
-      try {
-        // Basic HTTP routes
-        if (/^(post|get|put|patch|delete)\.js$/.test(fileName)) {
-          const [method] = fileName.split(".");
+      // Basic HTTP routes
+      if (/^(post|get|put|patch|delete)\.js$/.test(fileName)) {
+        const [method] = fileName.split(".");
 
+        try {
           const { default: routeHandler } = await import(fileRoute);
 
           preparedRouter[method](validRoute, routeHandler);
 
           return info(method, `${validRoute} loaded`);
+        } catch (err) {
+          return warn(method, errorHandler(err, method, validRoute, options));
         }
+      }
 
-        // Routes with middleware
-        if (/^(get|post|delete|put|patch)\@.+\.js$/.test(fileName)) {
-          const [method] = fileName.split("@");
-          const [middlewareName] = fileName.split("@")[1].split(".");
+      // Routes with middleware
+      if (/^(get|post|delete|put|patch)\@.+\.js$/.test(fileName)) {
+        const [method] = fileName.split("@");
+        const [middlewareName] = fileName.split("@")[1].split(".");
 
+        try {
           const { default: routeHandler } = await import(fileRoute);
           const selectedMiddleware = availableMiddleware[middlewareName];
 
@@ -90,9 +94,9 @@ const loadRoutes = async (route, options = { logger: true }) => {
           );
 
           return info(method, `${validRoute} loaded`);
+        } catch (err) {
+          return warn(method, errorHandler(err, method, validRoute, options));
         }
-      } catch (err) {
-        return warn(method, errorHandler(err, method, validRoute, options));
       }
     })
   );
