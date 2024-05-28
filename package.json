@@ -6,6 +6,10 @@
   "scripts": {
     "test": "vitest run --coverage"
   },
+  "imports": {
+    "#modules": "./src/modules/index.js",
+    "#constants": "./src/constants.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Piktorika/vink.git"

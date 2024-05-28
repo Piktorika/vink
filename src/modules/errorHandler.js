@@ -1,6 +1,6 @@
 import { DEFAULT_ERROR_MESSAGE, ERROR_MESSAGES } from "../constants.js";
 
-const errorHandler = (error, method, route) => {
+export default (error, method, route) => {
   const [detectedError] = ERROR_MESSAGES.filter((errorMessage) =>
     error.message.includes(errorMessage.expectedString)
   );
@@ -14,5 +14,3 @@ const errorHandler = (error, method, route) => {
     error.message
   );
 };
-
-export default errorHandler;
