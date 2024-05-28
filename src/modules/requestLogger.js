@@ -8,12 +8,17 @@ export default interceptor((req, res) => ({
     if (!res.statusCode || res.statusCode < 400 || res.statusCode > 599)
       success(`${req.method}`, req.url.toLowerCase());
     else if (res.statusCode === 404)
-      error(res.statusCode, `${req.url}: Not found`);
-    else error(res.statusCode, `${req.url}: ${
-      res.get("Content-Type").includes("application/json")
-        ? JSON.parse(body).message
-        : ""
-    }`);
+      error(req.method, `${req.url}: Not found`, res.statusCode);
+    else
+      error(
+        req.method,
+        `${req.url}: ${
+          res.get("Content-Type").includes("application/json")
+            ? JSON.parse(body).message
+            : ""
+        }`,
+        res.statusCode
+      );
 
     send(body);
   },

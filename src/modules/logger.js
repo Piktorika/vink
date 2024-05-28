@@ -27,9 +27,9 @@ const print = (type, method, msg) => {
 
 export const info = (method, message) => print("info", method, message);
 export const warn = (method, message) => print("warn", method, message);
-export const error = (statusCode, message) => {
-  const method = `ERROR${statusCode ? `:${statusCode}` : ""}`;
+export const error = (method, message, statusCode) => {
+  const methodParam = `${method.toUpperCase()}${statusCode ? `:${statusCode}` : ""}`;
 
-  print("error", method, message);
+  print("error", methodParam, message);
 };
 export const success = (method, message) => print("ok", method, message);
